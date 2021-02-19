@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hook1
+  annotations:
+     "helm.sh/hook": pre-upgrade
+    "helm.sh/hook-weight": {{ .Values.syncWaves.preSyncCheckNotPublishing | quote }}
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  template:
+    spec:
+      containers:
+      - name: hello
+        image: ubuntu
+        command:
+          - /bin/sh
+          - -c
+          - |
+            echo "Hello from hook 1"
+      restartPolicy: Never
+  backoffLimit: 4
